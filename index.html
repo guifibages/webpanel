@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Guifibages :: Panell de control</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style type="text/css">
+    body {
+    	padding-top: 50px;
+    }
+    form#edit {
+      display: none;
+    }
+    #logoutdiv {
+      display: none;
+    }
+    .admin-only {
+      display: none;
+    }
+    #nochanges {
+      display: none
+    }
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="#">Guifibages</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Usuari</a></li>
+              <li><a href="#about">Nodes</a></li>
+              <li><a href="#contact">Projectes</a></li>
+            </ul>
+          <div id="logoutdiv" class="nav nav-pills">
+            <button id="logout" class="btn btn-danger">Sortir</button>
+          </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div id="logindiv">
+        <form class="form-inline" id="loginform">
+          <fieldset>
+            <legend>Accés</legend>
+            <input name="username" class="span2" type="text" placeholder="username" id="username">
+            <input name="password" class="span2" type="password" placeholder="password" id="password">
+            <button type="submit" id="login" class="btn btn-success">Entrar</button>
+          </fieldset>
+        </form>
+      </div>
+
+      <div id="adminform" class="alert alert-info admin-only">
+        <legend>Administració</legend>
+        <div class="input-prepend">
+          <span class="add-on">Edit user</span>
+          <select id="userlist"></select>
+        </div>
+      </div>
+
+      <div id="editdiv">
+  		<form id="edit">
+        <div id="identity">
+    			<div class="input-prepend">
+    				<span class="add-on">Nom</span>
+    			  <input name="givenName" class="span2" type="text" placeholder="Pepito" disabled>
+          </div>
+          <div class="input-prepend">
+            <span class="add-on">Cognoms</span>
+            <input name="sn" class="span3" type="text" placeholder="Palotes">
+          </div>
+          <div class="input-prepend">
+            <span class="add-on">Usuari</span>
+            <input name="uid" id="targetuid" class="span3" type="text" placeholder="pepito.palotes">
+          </div>
+        
+        </div>
+
+        <div id="personal">
+          <legend>Dades de contacte</legend>
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-home"></i></span>
+            <input name="street" class="span3" type="text" placeholder="Carrer de Guifi, 23 3ª" required>
+          </div>
+
+          <div class="input-prepend">
+            <span class="add-on">Codi postal</span>
+            <input name="postalCode" class="span1" type="text" placeholder="08000" required>
+          </div>
+          <div class="input-prepend">
+            <span class="add-on">Localitat</span>
+            <input name="l" class="span2" type="text" placeholder="Samarruga" required>
+          </div>
+          <div class="input-prepend">
+            <span class="add-on">☎</span>
+            <input name="telephoneNumber" class="span2" type="text" placeholder="+34 123 456 789" required>
+          </div>          <div class="input-prepend">
+            <span class="add-on">email</span>
+            <input name="mail" class="span3" type="text" placeholder="pepito.palotes@correu.com" required>
+          </div>          <div class="input-prepend">
+            <span class="add-on">twitter</span>
+            <input class="span3" type="text" placeholder="ppalotes">
+          </div>
+        </div>
+
+        <div id="system">
+          <legend>Dades bancaries</legend>
+          <div class="input-prepend">
+            <span class="add-on">Nom entitat</span>
+            <input class="span3" type="text" placeholder="Caixa patim patam" required>
+          </div>
+          <div class="input-prepend">
+            <span class="add-on">Entitat</span>
+            <input class="span1" type="text" placeholder="1234" required>
+          </div>
+          <div class="input-prepend">
+            <span class="add-on">Oficina</span>
+            <input class="span1" type="text" placeholder="1234" required>
+          </div>
+          <div class="input-prepend">
+            <span class="add-on">DC</span>
+            <input class="span1" type="text" placeholder="12" required>
+          </div>
+          <div class="input-prepend">
+            <span class="add-on">Compte</span>
+            <input class="span2" type="text" placeholder="1234567890" required>
+          </div>
+          <legend>Serveis (preus per semestre)</legend>
+          <div class="form-inline">
+            <label class="checkbox">
+              <input type="checkbox"> Accés a Internet (60€)
+            </label>
+          </div>
+        </div>
+
+        <div id="passwords">
+          <legend>Contrasenyes</legend>
+          <div class="input-prepend">
+            <span class="add-on">Usuari</span>
+            <input name="userPassword" class="span5" type="text" placeholder="contrasenya" required>
+          </div>
+          <div class="input-prepend">
+            <span class="add-on">Serveis</span>
+            <input name="guifibagesPlaintextPassword" class="span2" type="text" placeholder="1001" required>
+          </div>
+
+          <dl>
+            <dt>Contrasenya d'usuari</dt>
+            <dd>Contrasenya principal de l'usuari. Es fa servir en:
+              <ul>
+                <li>Panell de control</li>
+                <li>Serveis web</li>
+                <li>Jabber (missatgeria instantania)</li>
+              </ul>
+              Es visualitza la contrasenya xifrada en format <code>{SSHA}ygPMl1/HoypBTfj9RjJSCtvbMxs44Ofj8i++qw==</code>
+            </dd>
+            <dt>Contrasenya de serveis</dt>
+              <dd>Contrasenya que farem servir per serveis de xarxa:
+                <ul>
+                  <li>Routers</li>
+                  <li>Hotspots</li>
+                  <li>Connexió a Internet</li>
+                </ul>
+              </dd>
+          </dl>
+
+        </div>
+
+        <div id="system" class="admin-only">
+          <legend>System settings</legend>
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-home"></i></span>
+            <input name="homeDirectory" class="span3" type="text" placeholder="/guifibages/users/pepito.palotes" disabled>
+          </div>
+          <div class="input-prepend">
+            <span class="add-on">uid</span>
+            <input name="uidNumber" class="span1" type="text" placeholder="1001" disabled>
+          </div>
+          <div class="input-prepend">
+            <span class="add-on">shell</span>
+            <input name="loginShell" class="span2" type="text" placeholder="/bin/false" disabled>
+          </div>
+        </div>
+      
+        <div id="notifications"></div>
+    		<div class="form-actions text-right">
+            <button type="submit" class="btn btn-success">Guardar canvis</button>
+            <button type="reset" class="btn btn-danger">Cancel·lar</button>
+    		</div>
+      </form></div>
+
+    </div>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    // http://www.quirksmode.org/js/cookies.html
+function createCookie(name,value,days) {
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime()+(days*24*60*60*1000));
+    var expires = "; expires="+date.toGMTString();
+  }
+  else var expires = "";
+  document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0;i < ca.length;i++) {
+    var c = ca[i];
+    while (c.charAt(0)==' ') c = c.substring(1,c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+  }
+  return null;
+}
+
+function eraseCookie(name) {
+  createCookie(name,"",-1);
+}
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
+jQuery.fn.reset = function () {
+  $(this).each (function() { this.reset(); });
+}
+
+    </script>
+    <script type="text/javascript">
+    fields = {
+      homeDirectory: ["admin", "Directori d'usuari"],
+      mail: ["user", "Correu electrònic"],
+      street: ["user", "Adreça postal"],
+      postalCode: ["user", "Codi Postal"],
+      givenName: ["admin", "Nom"],
+      l: ["user", "Població"],
+      sn: ["admin", "Cognoms"],
+      uid: ["admin", "Usuari"],
+      loginShell: ["admin", "Shell"],
+      uidNumber: ["admin", "uid"],
+      telephoneNumber: ["user", "Telèfon"],
+      userPassword: ["user", "contrasenya"],
+      guifibagesPlaintextPassword: ["user", "contrasenya"],
+      guifibagesApplicationPassword: ["user", "contrasenya"],
+    }
+
+    var login_value, login_cookie, uid_list, original_user_data, api_endpoint, user_list
+    api_endpoint = "http://localhost:8050/api/"
+    uid_list  = []
+    user_list = []
+    login_cookie = readCookie('login')
+    
+    if (login_cookie != null) {
+      console.log("login_cookie", login_cookie)
+      login_value = JSON.parse(login_cookie)
+      login()
+      $('#logindiv').hide()
+      $('form#edit').show()
+      $('#logoutdiv').show()
+    }
+
+    function get_user(target) {
+      $.post(api_endpoint + 'user/' + target +'/get', login_value, function(data){
+        var user_values = JSON.parse(data)
+        $('form#edit').reset()
+        for (var k in user_values) {
+          if (user_values.hasOwnProperty(k)) {
+            // console.log(target, k, user_values[k][0])
+            var inputfield = $('form#edit input[name="' + k + '"]')
+            if (k in fields) {
+              var required_level = fields[k][0]
+              var field = k
+              var field_name = fields[k][1]
+              inputfield.val(user_values[k][0])
+              if (user_values['access_level'] == fields[k][0]) {
+                inputfield.prop('disabled', false)
+              } else {
+                inputfield.prop('disabled', true)
+              }
+            }
+          }
+        }
+        original_user_data = user_values
+        if (user_values['access_level'] == 'admin') {
+          $('form#edit input').prop('disabled', false)
+          $('form#edit input').prop('required', false)
+        }
+
+      });
+    }
+    var alert_tpl
+    $.get('alert.html', function(data){
+      alert_tpl = $.parseHTML(data)
+    });
+    function showalert(alertstring, alertclass) {
+      if (typeof(alertstring) == 'undefined') {
+        console.log("showalert requires a parameter")
+        return false
+      }
+      var alertdiv = $(alert_tpl).clone()
+      if (typeof(alertclass) != 'undefined') {
+        alertdiv.addClass('alert-' + alertclass)
+      }
+      alerttext=$('<span/>')
+
+      alerttext.text(alertstring)
+      alerttext.appendTo(alertdiv)
+      alertdiv.appendTo($('#notifications'))
+    }
+    function update_user() {
+      var parsed_form = parse_form()
+      // showalert("Canvis guardats correctament", "success")
+      if (parsed_form == null) {
+        showalert("No s'han fet canvis")
+        return
+      }
+      var targetuser = $('input#targetuid').val()
+      $.extend(parsed_form, login_value)
+
+      $.post( api_endpoint + 'user/' + targetuser + '/update', parsed_form, function(data){
+        console.log("updated_user", data)
+      });
+    }
+    function logout() {
+      eraseCookie('login')
+      delete login_cookie
+      delete login_value
+      $('#logindiv').show()
+      $('#logoutdiv').hide()
+      $('form#edit').hide()
+      $('.admin-only').hide()
+    }
+    function next_uid() {
+      for (var i in uid_list) {
+        var uid = uid_list[i]
+        if (uid < 6000) {
+          return(uid+1)
+        }
+      }
+    }
+
+    function get_users() {
+      $.post(api_endpoint + 'users', login_value, function(data){
+        var users_raw =  JSON.parse(data)
+        for (var i=0, li=users_raw.length;i<li; i++) {
+          for (var k in users_raw[i]) {
+            if (users_raw[i].hasOwnProperty(k)) {
+              var user = users_raw[i][k]
+              if (user.hasOwnProperty('uid')) {
+                user_list.push(user.uid[0])
+                uid_list.push(Number(user.uidNumber[0]))
+                //console.log(user.uid[0])
+              }
+            }
+          }
+        }
+        // console.log(login_value.username, )
+        uid_list.sort(function(a,b){return b-a})
+        user_list.sort()
+        for (var i=0, li=user_list.length; i<li; i++) {
+          var userselect = $('<option/>')
+          userselect.text(user_list[i])
+          userselect.appendTo($('select#userlist'))
+        }
+      });
+    }
+
+    function login() {
+      var login_object
+      if (typeof(login_value) === "undefined") {
+        login_object = $('form#loginform').serializeObject()
+      } else {
+        login_object = login_value
+      }
+       
+      $.post(api_endpoint + 'login', login_object, function(data){
+        var login_result = JSON.parse(data)
+        login_value = login_object
+        createCookie('login', JSON.stringify(login_value), 0)
+
+        $('#logindiv').hide()
+        $('#logoutdiv').show()
+        $('form#edit').show()
+        if (login_result.access_level == 'admin') {
+          $(".admin-only").show()
+          get_users()
+        }
+        get_user(login_value.username)
+      });
+//      get_user(login_value.username, login_value.username, login_value.password)
+    }
+    $('form input[type="reset"]').click(function(){
+      get_user(user_values.username)
+      return false
+    });
+    function parse_form() {
+     var form_object = $('form#edit').serializeObject()
+      for (var k in form_object) {
+        if (original_user_data.hasOwnProperty(k)) {
+          if (original_user_data[k].indexOf(form_object[k]) != -1) {
+            // Unchanged value
+            delete form_object[k]
+          }
+        } else {
+          if (form_object[k].length == 0) {
+            // Empty non existing value
+            delete form_object[k]
+          }
+        }
+      }
+      if (Object.keys(form_object).length>0) {
+        return form_object
+      } else {
+        return null
+      }
+    }
+    $('form#edit').submit(function(){
+      update_user()
+      return false;
+    })
+    $('form#loginform').submit(function(){
+      login()
+      return false;
+    });
+    $('button#logout').click(function(){
+      logout()
+    });
+    $('select#userlist').change(function(){
+      var edituser = $('select#userlist option:selected').text()
+      get_user(edituser)
+      console.log("Edit user", edituser)
+    });
+
+    /*
+    get_user('carmela.rubinos', 'ignacio.torres', 'Ktr3khp')
+    get_user('ignacio.torres', 'ignacio.torres', 'Ktr3khp')
+    get_user('ignacio.torres', 'test', 'rabada2011')
+    get_user('test', 'test', 'rabada2011') */
+    </script>
+</body>
+</html>
