@@ -60,16 +60,51 @@
         </form>
       </div>
 
-      <div id="adminform" class="alert alert-info admin-only">
+      <div id="adminform" class="alert alert-info admin-only form-inline">
         <legend>Administració</legend>
         <div class="input-prepend">
-          <span class="add-on">Edit user</span>
+          <span class="add-on">Editar usuari</span>
           <select id="userlist"></select>
         </div>
+	<button class="btn btn-primary pull-right" id="addUserButton" data-toggle="modal" data-target="#addUserModal">Nou usuari</button>
+      </div>
+      <div id="addUserModal" class="modal hide fade" tabindex="-1" role="dialog">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Nou usuari</h3>
+  </div>
+  <div class="modal-body">
+<form id="addUserForm">
+        <div id="identity">
+    			<div class="input-prepend">
+    				<span class="add-on">Nom</span>
+    			  <input name="newuser_givenName" class="span2" type="text" placeholder="Pepito">
+          </div>
+          <div class="input-prepend">
+            <span class="add-on">Cognoms</span>
+            <input name="newuser_sn" class="span3" type="text" placeholder="Palotes">
+          </div>
+          <div class="input-prepend">
+            <span class="add-on">Usuari</span>
+            <input name="newuser_uid" id="newuser_uid" class="span3" type="text" placeholder="pepito.palotes" required>
+          </div>
+        
+          <div class="input-prepend">
+            <span class="add-on">Contrasenya</span>
+            <input name="newuser_userPassword" class="span5" type="text" placeholder="contrasenya" required>
+          </div>
+        </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Tancar</button>
+    <button type="submit" class="btn btn-primary">Afegir usuari</button>
+  </div>
+</form>
       </div>
 
       <div id="editdiv">
   		<form id="edit">
+
         <div id="identity">
     			<div class="input-prepend">
     				<span class="add-on">Nom</span>
@@ -146,7 +181,7 @@
         <div id="passwords">
           <legend>Contrasenyes</legend>
           <div class="input-prepend">
-            <span class="add-on">Usuari</span>
+            <span class="add-on">Contrasenya</span>
             <input name="userPassword" class="span5" type="text" placeholder="contrasenya" required>
           </div>
           <div class="input-prepend">
@@ -268,7 +303,7 @@ jQuery.fn.reset = function () {
     }
 
     var login_value, login_cookie, uid_list, original_user_data, api_endpoint, user_list
-    api_endpoint = "http://localhost:8050/api/"
+    api_endpoint = "https://" + window.location.hostname +"/api/"
     uid_list  = []
     user_list = []
     login_cookie = readCookie('login')
@@ -330,8 +365,22 @@ jQuery.fn.reset = function () {
       alerttext.appendTo(alertdiv)
       alertdiv.appendTo($('#notifications'))
     }
+
+    function add_user() {
+      user_data = $('form#addUserForm').serializeObject()
+      $.extend(user_data, login_value)
+      $.post( api_endpoint + 'user/new', user_data, function(data){
+        parsed = JSON.parse(data)
+        get_users(parsed.uid)
+        get_user(parsed.uid)
+        console.log("new_user", data)
+        $('#addUserModal').modal('hide')
+        // get_user(parsed.original_record.uid)
+      });
+    }
+    
     function update_user() {
-      var parsed_form = parse_form()
+      var parsed_form = parse_form('edit')
       // showalert("Canvis guardats correctament", "success")
       if (parsed_form == null) {
         showalert("No s'han fet canvis")
@@ -341,9 +390,12 @@ jQuery.fn.reset = function () {
       $.extend(parsed_form, login_value)
 
       $.post( api_endpoint + 'user/' + targetuser + '/update', parsed_form, function(data){
+	      parsed = JSON.parse(data)
         console.log("updated_user", data)
+	      get_user(parsed.original_record.uid)
       });
     }
+
     function logout() {
       eraseCookie('login')
       delete login_cookie
@@ -362,7 +414,10 @@ jQuery.fn.reset = function () {
       }
     }
 
-    function get_users() {
+    function get_users(selected_user) {
+      if (typeof(selected_user) == 'undefined') {
+        selected_user = login_value.username
+      }
       $.post(api_endpoint + 'users', login_value, function(data){
         var users_raw =  JSON.parse(data)
         for (var i=0, li=users_raw.length;i<li; i++) {
@@ -383,6 +438,9 @@ jQuery.fn.reset = function () {
         for (var i=0, li=user_list.length; i<li; i++) {
           var userselect = $('<option/>')
           userselect.text(user_list[i])
+      	  if (user_list[i] == selected_user) {
+      	    userselect.prop('selected', true)
+      	  }
           userselect.appendTo($('select#userlist'))
         }
       });
@@ -416,8 +474,10 @@ jQuery.fn.reset = function () {
       get_user(user_values.username)
       return false
     });
-    function parse_form() {
-     var form_object = $('form#edit').serializeObject()
+    /*
+    */
+    function parse_form(form) {
+     var form_object = $('form#' + form).serializeObject()
       for (var k in form_object) {
         if (original_user_data.hasOwnProperty(k)) {
           if (original_user_data[k].indexOf(form_object[k]) != -1) {
@@ -437,6 +497,7 @@ jQuery.fn.reset = function () {
         return null
       }
     }
+
     $('form#edit').submit(function(){
       update_user()
       return false;
@@ -445,13 +506,16 @@ jQuery.fn.reset = function () {
       login()
       return false;
     });
+    $('form#addUserForm').submit(function(){
+      add_user()
+      return false;
+    });
     $('button#logout').click(function(){
       logout()
     });
     $('select#userlist').change(function(){
       var edituser = $('select#userlist option:selected').text()
       get_user(edituser)
-      console.log("Edit user", edituser)
     });
 
     /*
