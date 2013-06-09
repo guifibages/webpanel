@@ -94,6 +94,7 @@
             <input name="newuser_userPassword" class="span5" type="text" placeholder="contrasenya" required>
           </div>
         </div>
+
   </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">Tancar</button>
@@ -118,7 +119,11 @@
             <span class="add-on">Usuari</span>
             <input name="uid" id="targetuid" class="span3" type="text" placeholder="pepito.palotes">
           </div>
-        
+        <div class="input-prepend">
+          <span class="add-on">Nº node</span>
+          <input name="roomNumber" class="span1" type="text" placeholder="22274" disabled>
+        </div>
+
         </div>
 
         <div id="personal">
@@ -148,7 +153,7 @@
           </div>
         </div>
 
-        <div id="system">
+        <div id="bank">
           <legend>Dades bancaries</legend>
           <div class="input-prepend">
             <span class="add-on">Nom entitat</span>
@@ -210,6 +215,14 @@
           </dl>
 
         </div>
+
+        <!--div id="URLs" class="admin-only">
+          <legend>URLs</legend>
+          <div class="input-prepend">
+            <span class="add-on">node</span>
+            <input name="labeledURI" class="span4" type="text" placeholder="http://guifi.net/ca/guifi/cnml/22274/node" disabled>
+          </div>
+        </div-->
 
         <div id="system" class="admin-only">
           <legend>System settings</legend>
@@ -300,6 +313,7 @@ jQuery.fn.reset = function () {
       userPassword: ["user", "contrasenya"],
       guifibagesPlaintextPassword: ["user", "contrasenya"],
       guifibagesApplicationPassword: ["user", "contrasenya"],
+      roomNumber: ["user", "Guifi.net Node number"],
     }
 
     var login_value, login_cookie, uid_list, original_user_data, api_endpoint, user_list
@@ -325,6 +339,7 @@ jQuery.fn.reset = function () {
           if (user_values.hasOwnProperty(k)) {
             // console.log(target, k, user_values[k][0])
             var inputfield = $('form#edit input[name="' + k + '"]')
+
             if (k in fields) {
               var required_level = fields[k][0]
               var field = k
