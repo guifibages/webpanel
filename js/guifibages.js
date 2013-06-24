@@ -1,3 +1,7 @@
+$.ajaxSetup ({
+    // Disable caching of AJAX responses
+    cache: false
+});
 /** Fields access and definitions */
 var fields = {
   homeDirectory: ["admin", "Directori d'usuari"],
@@ -135,15 +139,9 @@ function logout() {
   eraseCookie('login')
   delete login_cookie
   delete login_value
-  $('div#main').load("/html/loginform.html", function() {
-    $('form#loginform').submit(function(){
-      login()
-      return false;
-    });
-
-  });
-  $('#logoutdiv').hide()
+  location.reload()
 }
+
 function next_uid() {
   for (var i in uid_list) {
     var uid = uid_list[i]
@@ -205,7 +203,6 @@ function login() {
     var login_result = JSON.parse(data)
     login_value = login_object
     createCookie('login', JSON.stringify(login_value), 0)
-
     get_user(login_value.username)
     $('#logoutdiv').show()
     if (login_result.access_level == 'admin') {
@@ -246,12 +243,13 @@ function parse_form(form) {
 }
 
 $('form#loginform').submit(function(){
-  login()
+  login();
   return false;
 });
 
 $('button#logout').click(function(){
-  logout()
+  logout();
+  return false;
 });
 
 $('svg#adduser').click(function(){
@@ -269,9 +267,3 @@ $('select#userlist').change(function(){
   var edituser = $('select#userlist option:selected').text()
   get_user(edituser)
 });
-
-/*
-get_user('carmela.rubinos', 'ignacio.torres', 'Ktr3khp')
-get_user('ignacio.torres', 'ignacio.torres', 'Ktr3khp')
-get_user('ignacio.torres', 'test', 'rabada2011')
-get_user('test', 'test', 'rabada2011') */
